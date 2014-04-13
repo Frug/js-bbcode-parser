@@ -57,12 +57,12 @@ var parserTags = {
 
 			var myUrl = content;
 
-			ajaxChatConfig.urlPattern.lastIndex = 0;
-			if ( !ajaxChatConfig.urlPattern.test( myUrl ) ) {
+			BBCodeParser.urlPattern.lastIndex = 0;
+			if ( !BBCodeParser.urlPattern.test( myUrl ) ) {
 				myUrl = "";
 			}
 
-			return '<img class="bbCodeImage" src="' + myUrl + '" />';
+			return '<img class="bbCodeImage" src="' + myUrl + '">';
 		},
 		closeTag: function(params,content) {
 			return '';
@@ -136,8 +136,8 @@ var parserTags = {
 				myUrl = params.substr(1);
 			}
 
-			ajaxChatConfig.urlPattern.lastIndex = 0;
-			if ( !ajaxChatConfig.urlPattern.test( myUrl ) ) {
+			BBCodeParser.urlPattern.lastIndex = 0;
+			if ( !BBCodeParser.urlPattern.test( myUrl ) ) {
 				myUrl = "#";
 			}
 
@@ -226,9 +226,10 @@ var BBCodeParser = (function(parserTags, colors) {
 		
 		while (
 			text !== (text = text.replace(innerMostRegExp, function(matchStr, tagName, tagParams, tagContents) {
+				tagName = tagName.toLowerCase();
 				tagParams = tagParams || "";
 				tagContents = tagContents || "";
-				return parserTags[tagName].openTag(tagParams) + tagContents + parserTags[tagName].closeTag(tagParams);
+				return parserTags[tagName].openTag(tagParams, tagContents) + tagContents + parserTags[tagName].closeTag(tagParams, tagContents);
 			}))
 		);
 		
@@ -243,6 +244,9 @@ var BBCodeParser = (function(parserTags, colors) {
 		return text;
 		
 	};
+	
+	me.urlPattern = urlPattern;
+	me.emailPattern = emailPattern;
 		
 	return me;
 })(parserTags, parserColors);
