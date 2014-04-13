@@ -26,10 +26,10 @@ var parserTags = {
 	'color': {
 		openTag: function(params,content) {
 			var colorCode = params.substr(1) || "inherit";
-			ajaxChat.BBCodeParser.regExpAllowedColorNames.lastIndex = 0;
-			ajaxChat.BBCodeParser.regExpValidHexColor.lastIndex = 0;
-			if ( !ajaxChat.BBCodeParser.regExpAllowedColorNames.test( colorCode ) ) {
-				if ( !ajaxChat.BBCodeParser.regExpValidHexColor.test( colorCode ) ) {
+			BBCodeParser.regExpAllowedColors.lastIndex = 0;
+			BBCodeParser.regExpValidHexColors.lastIndex = 0;
+			if ( !BBCodeParser.regExpAllowedColors.test( colorCode ) ) {
+				if ( !BBCodeParser.regExpValidHexColors.test( colorCode ) ) {
 					colorCode = "inherit";
 				} else {
 					if (colorCode.substr(0,1) !== "#") {
@@ -247,6 +247,8 @@ var BBCodeParser = (function(parserTags, colors) {
 	
 	me.urlPattern = urlPattern;
 	me.emailPattern = emailPattern;
+	me.regExpAllowedColors = regExpAllowedColors;
+	me.regExpValidHexColors = regExpValidHexColors;
 		
 	return me;
 })(parserTags, parserColors);

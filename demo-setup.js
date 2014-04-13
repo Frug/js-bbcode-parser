@@ -48,6 +48,7 @@
 	addEvent(domElements['bbcodeItalic'], 'click', function() { insertAtCursor(domElements['mainInput'],'[i]','[/i]'); });
 	addEvent(domElements['bbcodeURL'], 'click', function() { insertAtCursor(domElements['mainInput'],'[URL]','[/URL]'); });
 	addEvent(domElements['bbcodeIMG'], 'click', function() { insertAtCursor(domElements['mainInput'],'[IMG]','[/IMG]'); });
+	addEvent(domElements['bbcodeCode'], 'click', function() { insertAtCursor(domElements['mainInput'],'[CODE]','[/CODE]'); });
 	
 	
 
