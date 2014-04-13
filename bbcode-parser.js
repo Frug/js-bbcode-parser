@@ -159,11 +159,9 @@ var BBCodeParser = (function(parserTags, colors) {
 		emailPattern = /[^\s@]+@[^\s@]+\.[^\s@]+/,
 		fontFacePattern = /^([a-z][a-z0-9_]+|"[a-z][a-z0-9_\s]+")$/i,
 		tagNames = [],
-		tagsNoParse = [],
-		regExpNoParseTags,
-		regExpNonTags,
+		tagNamesNoParse = [],
 		regExpAllowedColors,
-		regExpValidHexColors,
+		regExpValidHexColors = /^#?[a-fA-F0-9]{6}$/,
 		ii, tagName, len;
 		
 	// create tag list and lookup fields
@@ -173,7 +171,7 @@ var BBCodeParser = (function(parserTags, colors) {
 		} else {
 			tagNames.push(tagName);
 			if ( parserTags[tagName].noParse ) {
-				tagsNoParse.push(tagName);
+				tagNamesNoParse.push(tagName);
 			}
 		}
 
@@ -193,13 +191,6 @@ var BBCodeParser = (function(parserTags, colors) {
 	}
 	
 	regExpAllowedColors = new RegExp('^(?:' + parserColors.join('|') + ')$');
-	regExpValidHexColors = /^#?[a-fA-F0-9]{6}$/;
-	
-	//regExpNonTags = new RegExp('(\\[)((?!/?' + tagNames.join('(?:\\]|\\b|=)|/?') + '(?:\\]|\\b|=)).*?)(\\])', 'gi');
-	//regExpNoParseTags = new RegExp('\\[(' + tagsNoParse.join('|') + ')([ =][^\\]]*?)?\\]([\\s\\S]*?)\\[/\\1\\]', 'gi');
-	
-	//var regexFindInnermost = /\[(code|noparse)\b(?:[ =]([\w"#\-\:\/= ]*?))?\](?:(?=([^\[]+))\3|\[(?!\1\b(?:[ =](?:[\w"#\-\:\/= ]*?))?\]))*?\[\/\1\]/g;
-	//var newFindInnermost =   /\[(code|noparse)\b(?:[ =]([\w"#\-\:\/= ]*?))?\]((?:(?=([^\[]+))\4|\[(?!\1\b(?:[ =](?:[\w"#\-\:\/= ]*?))?\]))*?)\[\/\1\]/;
 	
 	function createInnermostTagRegExp(tagsArray) {
 		var openingTag = '\\[(' + tagsArray.join('|') + ')\\b(?:[ =]([\\w"#\\-\\:\\/= ]*?))?\\]',
@@ -245,11 +236,9 @@ var BBCodeParser = (function(parserTags, colors) {
 	}
 	
 	me.process = function(text, config) {
-		text = escapeBBCodesInsideTags(text, tagsNoParse);
+		text = escapeBBCodesInsideTags(text, tagNamesNoParse);
 		
 		text = processTags(text, tagNames);
-		
-		console.log(text);
 		
 		return text;
 		

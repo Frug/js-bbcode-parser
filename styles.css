@@ -48,6 +48,7 @@ button::-moz-focus-inner,input::-moz-focus-inner,legend{border:0;padding:0}
 .container button, .container input, .container select { border: 1px solid #0274BA; }
 .container button { background: #D9DCFF; padding: 5px 10px; }
 .container button:hover { background: #0274BA; color: white; }
+.container button#parseButton { background: #7BF99F; border-color: #00EA43; margin-top: 5px; }
 
 
 #mainInput { border: 1px solid #bbb; padding: 5px; width: 100%; margin: 5px auto; box-sizing: border-box; -moz-box-sizing: border-box; }
