@@ -43,13 +43,31 @@ b,strong,optgroup{font-weight:700}
 pre,textarea{overflow:auto}
 button::-moz-focus-inner,input::-moz-focus-inner,legend{border:0;padding:0}
 
-#forkongithub a{background:#ff7600;color:#fff;text-decoration:none;font-family:arial, sans-serif;text-align:center;font-weight:bold;padding:5px 40px;font-size:1rem;line-height:2rem;position:relative;transition:0.5s;}#forkongithub a:hover{background:#ff3000;color:#fff;}#forkongithub a::before,#forkongithub a::after{content:"";width:100%;display:block;position:absolute;top:1px;left:0;height:1px;background:#fff;}#forkongithub a::after{bottom:1px;top:auto;}@media screen and (min-width:800px){#forkongithub{position:absolute;display:block;top:0;right:0;width:200px;overflow:hidden;height:200px;}#forkongithub a{width:200px;position:absolute;top:60px;right:-60px;transform:rotate(45deg);-webkit-transform:rotate(45deg);box-shadow:3px 3px 5px rgba(0,0,0,0.8);}
-
 .container { max-width: 940px; margin: 15px auto; border: 1px solid #ddd; padding: 30px; background: #f0f0f0; }
+.container h3 { margin: 0; font-size: 15px; }
+.container h2 { margin-bottom: 5px; }
 .container h1, .container h2 { text-shadow: 0px 1px 0px #fff; }
 .container button, .container input, .container select { border: 1px solid #0274BA; }
 .container button { background: #D9DCFF; padding: 5px 10px; }
 .container button:hover { background: #0274BA; color: white; }
 .container button#parseButton { background: #7BF99F; border-color: #00EA43; margin-top: 5px; }
+.container .hints { padding: 15px 15px 15px 30px; background: #DFDFDF; }
+
+#theButtons button { border-right-width: 0px; }
+#theButtons button:first-child { border-radius: 5px 0 0 5px; }
+#theButtons button:last-child { border-radius: 0 5px 5px 0; border-right-width: 1px; }
 
 #mainInput { border: 1px solid #bbb; padding: 5px; width: 100%; margin: 5px auto; box-sizing: border-box; -moz-box-sizing: border-box; }
+#allowedBBCodes { font-family: monospace; color:#2c7bac; font-size: 14px; }
+
+#forkongithub a{background:#ff7600;color:#fff;text-decoration:none;font-family:arial, sans-serif;text-align:center;font-weight:bold;padding:5px 40px;font-size:1rem;line-height:2rem;position:relative;transition:0.5s;}
+#forkongithub a:hover{background:#ff3000;color:#fff;}
+#forkongithub a::before,#forkongithub a::after{content:"";width:100%;display:block;position:absolute;top:1px;left:0;height:1px;background:#fff;}
+#forkongithub a::after{bottom:1px;top:auto;}
+@media screen and (min-width:800px){
+	#forkongithub{position:absolute;display:block;top:0;right:0;width:200px;overflow:hidden;height:200px;}
+	#forkongithub a{width:200px;position:absolute;top:60px;right:-60px;transform:rotate(45deg);-webkit-transform:rotate(45deg);box-shadow:3px 3px 5px rgba(0,0,0,0.8);}
+}
+@media screen and (max-width: 800px) {
+	.container { padding: 5px; margin: 0; }
+}

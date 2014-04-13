@@ -6,7 +6,11 @@
 			mainOutput: 'mainOutput',
 			bbcodeBold: 'bbcodeBold',
 			bbcodeItalic: 'bbcodeItalic',
-			bbcodeURL: 'bbcodeURL'
+			bbcodeURL: 'bbcodeURL',
+			allowedBBCodes: 'allowedBBCodes',
+			bbcodeIMG: 'bbcodeIMG',
+			bbcodeCode: 'bbcodeCode',
+			theButtons: 'theButtons'
 		},
 		domElements = {};
 	
@@ -24,13 +28,26 @@
 	
 	function insertAtCursor(myField, myValueBefore, myValueAfter) {
 		var startPos, endPos;
+		myField.focus();
 		if (document.selection) {
-			myField.focus();
 			document.selection.createRange().text = myValueBefore + document.selection.createRange().text + myValueAfter;
 		} else if (myField.selectionStart || myField.selectionStart == '0') {
 			startPos = myField.selectionStart;
 			endPos = myField.selectionEnd;
-			myField.value = myField.value.substring(0, startPos)+ myValueBefore+ myField.value.substring(startPos, endPos)+ myValueAfter+ myField.value.substring(endPos, myField.value.length);
+			myField.value = myField.value.substring(0, startPos) + myValueBefore + myField.value.substring(startPos, endPos)+ myValueAfter + myField.value.substring(endPos, myField.value.length);
+			myField.setSelectionRange(startPos,endPos + myValueBefore.length + myValueAfter.length);
+		} else {
+			myField.value += myValueBefore + myValueAfter;
+		}
+	}
+	
+	function createButtons() {
+		var theElement, i;
+		for (i = BBCodeParser.allowedTags.length - 1; i >= 0 ; i--) {
+			theElement = document.createElement('button');
+			theElement.innerHTML = BBCodeParser.allowedTags[i];
+			domElements['theButtons'].appendChild(theElement);
+			addEvent(theElement, 'click', function() { insertAtCursor(domElements['mainInput'],'[' + this.innerHTML + ']','[/' + this.innerHTML + ']'); });
 		}
 	}
 	
@@ -42,15 +59,9 @@
 		domElements[key] = document.getElementById(domIDs[key]);
 	}
 	
+	createButtons();
+	
 	addEvent(domElements['parseButton'], 'click', doParse);
-	
-	addEvent(domElements['bbcodeBold'], 'click', function() { insertAtCursor(domElements['mainInput'],'[b]','[/b]'); });
-	addEvent(domElements['bbcodeItalic'], 'click', function() { insertAtCursor(domElements['mainInput'],'[i]','[/i]'); });
-	addEvent(domElements['bbcodeURL'], 'click', function() { insertAtCursor(domElements['mainInput'],'[URL]','[/URL]'); });
-	addEvent(domElements['bbcodeIMG'], 'click', function() { insertAtCursor(domElements['mainInput'],'[IMG]','[/IMG]'); });
-	addEvent(domElements['bbcodeCode'], 'click', function() { insertAtCursor(domElements['mainInput'],'[CODE]','[/CODE]'); });
-	
-	
 
 })();
 
