@@ -4,7 +4,7 @@
  * @license MIT License
  */
 
-var BBCodeParser = (function(parserTags, colors) {
+var BBCodeParser = (function(parserTags, parserColors) {
 	'use strict';
 	
 	var me = {},
@@ -19,6 +19,9 @@ var BBCodeParser = (function(parserTags, colors) {
 		
 	// create tag list and lookup fields
 	for (tagName in parserTags) {
+		if (!parserTags.hasOwnProperty(tagName))
+			continue;
+		
 		if (tagName === '*') {
 			tagNames.push('\\' + tagName);
 		} else {
@@ -53,37 +56,45 @@ var BBCodeParser = (function(parserTags, colors) {
 		return new RegExp( openingTag + notContainingOpeningTag + closingTag, 'i');
 	}
 	
+	function escapeInnerTags(matchStr, tagName, tagParams, tagContents) {
+		tagParams = tagParams || "";
+		tagContents = tagContents || "";
+		tagContents = tagContents.replace(/\[/g, "&#91;").replace(/\]/g, "&#93;");
+		return "[\u0000" + tagName + tagParams + "]" + tagContents + "[/\u0000" + tagName + "]";
+	}
+	
 	function escapeBBCodesInsideTags(text, tags) {
+		var innerMostRegExp;
+		
 		if (tags.length === 0 || text.length < 7)
 			return text;
 
-		var innerMostRegExp = createInnermostTagRegExp(tags);
+		innerMostRegExp = createInnermostTagRegExp(tags);
 		
 		while (
-			text !== (text = text.replace(innerMostRegExp, function(matchStr, tagName, tagParams, tagContents) {
-				tagParams = tagParams || "";
-				tagContents = tagContents || "";
-				tagContents = tagContents.replace(/\[/g, "&#91;").replace(/\]/g, "&#93;");
-				return "[\u0000" + tagName + tagParams + "]" + tagContents + "[/\u0000" + tagName + "]";
-			}))
+			text !== (text = text.replace(innerMostRegExp, escapeInnerTags))
 		);
 
 		return text.replace(/\u0000/g,'');
 	}
 	
+	function replaceTagsAndContent(matchStr, tagName, tagParams, tagContents) {
+		tagName = tagName.toLowerCase();
+		tagParams = tagParams || "";
+		tagContents = tagContents || "";
+		return parserTags[tagName].openTag(tagParams, tagContents) + (parserTags[tagName].content ? parserTags[tagName].content(tagParams, tagContents) : tagContents) + parserTags[tagName].closeTag(tagParams, tagContents);
+	}
+	
 	function processTags(text, tags) {
+		var innerMostRegExp;
+		
 		if (tags.length === 0 || text.length < 7)
 			return text;
 		
-		var innerMostRegExp = createInnermostTagRegExp(tags);
+		innerMostRegExp = createInnermostTagRegExp(tags);
 		
 		while (
-			text !== (text = text.replace(innerMostRegExp, function(matchStr, tagName, tagParams, tagContents) {
-				tagName = tagName.toLowerCase();
-				tagParams = tagParams || "";
-				tagContents = tagContents || "";
-				return parserTags[tagName].openTag(tagParams, tagContents) + (parserTags[tagName].content ? parserTags[tagName].content(tagParams, tagContents) : tagContents) + parserTags[tagName].closeTag(tagParams, tagContents);
-			}))
+			text !== (text = text.replace(innerMostRegExp, replaceTagsAndContent))
 		);
 		
 		return text;
@@ -95,7 +106,6 @@ var BBCodeParser = (function(parserTags, colors) {
 		text = processTags(text, tagNames);
 		
 		return text;
-		
 	};
 	
 	me.allowedTags = tagNames;
